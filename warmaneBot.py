@@ -15,7 +15,6 @@ password = os.getenv('password')
 api_key = os.getenv('api_key')
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
 driver = webdriver.Chrome('chromedriver',options=chrome_options)
 driver.get(page_url)
 
@@ -53,9 +52,12 @@ def redeem_points(user_war, password_war, driver):
             driver.find_element_by_class_name('wm-ui-btn').click()
             print("Logged in")
             driver.get(vote_url)
+            time.sleep(2)
             try:
-                driver.find_element_by_class_name('wm-ui-hyper-custom-b').click()
-                print("Points redemeeded")
+                driver.find_element_by_css_selector(".wm-ui-hyper-custom-b[data-click='collectpoints']").click()
+                time.sleep(5)
+                points = driver.find_element_by_class_name("myPoints").get_attribute("innerHTML")
+                print("Points redemeeded : " + points)
             except Exception as e:
                 print("Error redeeming: " + e)
 
@@ -64,4 +66,3 @@ def redeem_points(user_war, password_war, driver):
 
 redeem_points(user, password, driver)
 driver.quit()
-
